@@ -30,6 +30,7 @@ class TestPersonalAccount:
         main_page = MainPage(driver)
         account_page = AccountPage(driver)
         account_page.click_button_personal_account()
+        main_page.main_page_loading_wait()
         account_page.click_logout_button()
         main_page.main_page_loading_wait()
-        assert account_page.find_element_login()
+        assert account_page.wait_login_button_clickable()

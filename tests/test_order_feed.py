@@ -17,15 +17,12 @@ class TestOrderFeed:
         assert order_feed_page.find_element_with_orders_details_on_window()
 
     @allure.title('Проверка: заказы пользователя из раздела «История заказов» отображаются на странице «Лента заказов»')
-    def test_order_history_in_feed(self, driver, create_user_and_get_token, login_user):
-        main_page = MainPage(driver)
-        order_feed_page = OrderFeedPage(driver)
-        account_page = AccountPage(driver)
-        main_page.create_order()
-        main_page.main_page_loading_wait()
+    def test_order_history_in_feed(self, prepared_order):
+        main_page, order_feed_page, account_page = prepared_order
         get_number_of_new_order = order_feed_page.wait_to_get_actual_order_number()
         main_page.main_page_loading_wait()
         order_feed_page.click_on_close_button_information_of_order()
+        main_page.main_page_loading_wait()
         main_page.click_on_account_link()
         main_page.main_page_loading_wait()
         account_page.click_button_oder_histore()
@@ -40,23 +37,25 @@ class TestOrderFeed:
         main_page = MainPage(driver)
         order_feed_page = OrderFeedPage(driver)
         main_page.click_on_list_order_link()
-        counter_method_name = order_feed_page.get_counter_method_name(counter_type) # Получаем имя метода получения значения счетчика
-        get_counter_method = getattr(order_feed_page, counter_method_name) # Получаем начальное значение счетчика
-        count_before = get_counter_method()
+        if counter_type == "total":
+            count_before = order_feed_page.get_total_orders_count()
+        elif counter_type == "today":
+            count_before = order_feed_page.get_today_orders_count()
         main_page.click_on_constructor_link()
         main_page.create_order()
         main_page.main_page_loading_wait()
         order_feed_page.click_on_close_button_information_of_order()
+        main_page.main_page_loading_wait()
         main_page.click_on_list_order_link()
-        count_after = get_counter_method()
+        if counter_type == "total":
+            count_after = order_feed_page.get_total_orders_count()
+        elif counter_type == "today":
+            count_after = order_feed_page.get_today_orders_count()
         assert count_after > count_before
 
     @allure.title('После создании нового заказа его номер появляется в резделе "В работе"')
-    def test_order_number_appears_in_progress(self, driver, create_user_and_get_token, login_user):
-        main_page = MainPage(driver)
-        order_feed_page = OrderFeedPage(driver)
-        main_page.main_page_loading_wait()
-        main_page.create_order()
+    def test_order_number_appears_in_progress(self, prepared_order):
+        main_page, order_feed_page, _ = prepared_order
         new_order_number = order_feed_page.wait_to_get_actual_order_number()
         main_page.main_page_loading_wait()
         order_feed_page.click_on_close_button_information_of_order()

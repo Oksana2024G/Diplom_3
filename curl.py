@@ -1,12 +1,12 @@
 class Url:
-    TEST_URL = 'https://stellarburgers.nomoreparties.site/'
-    FORGOT_PASSWORD_URL = 'https://stellarburgers.nomoreparties.site/forgot-password'
-    RESET_PASSWORD_URL = 'https://stellarburgers.nomoreparties.site/reset-password'
+    TEST_URL = 'https://stellarburgers.nomoreparties.site/'  # Базовый URL (без завершающего слеша)
 
-    LOGIN_URL = 'https://stellarburgers.nomoreparties.site/login'
-    ORDER_HISTORY_URL = 'https://stellarburgers.nomoreparties.site/account/order-history'
+    FORGOT_PASSWORD_URL = TEST_URL + 'forgot-password'
+    RESET_PASSWORD_URL = TEST_URL + 'reset-password'
+    LOGIN_URL = TEST_URL + 'login'
+    ORDER_HISTORY_URL = TEST_URL + 'account/order-history'
+    LIST_OF_ORDER_URL = TEST_URL + 'feed'
 
-    LIST_OF_ORDER_URL = 'https://stellarburgers.nomoreparties.site/feed'
 
 class UrlApi:
     BASE_URL = 'https://stellarburgers.nomoreparties.site'

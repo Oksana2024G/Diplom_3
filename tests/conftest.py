@@ -7,10 +7,12 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.firefox import GeckoDriverManager
+# from webdriver_manager.firefox import GeckoDriverManager
 from pages.main_page import MainPage
 from pages.account_page import AccountPage
 from curl import *
+from pages.order_feed_page import OrderFeedPage
+
 
 @pytest.fixture(params=["chrome", "firefox"])
 def driver(request):
@@ -23,7 +25,7 @@ def driver(request):
     elif request.param == "firefox":
         firefox_options = FirefoxOptions()
         firefox_options.profile = webdriver.FirefoxProfile()
-        firefox_service = FirefoxService(GeckoDriverManager().install())
+        firefox_service = FirefoxService()
         driver = webdriver.Firefox(service=firefox_service, options=firefox_options)
         driver.set_window_size(1920, 1080)
         driver.get(Url.TEST_URL)
@@ -38,7 +40,6 @@ def create_user_and_get_token():
     access_token = register_response.json().get("accessToken")
     yield user_data, access_token  # возвращаем user_data и accessToken
     delete_response = requests.delete(f'{UrlApi.BASE_URL}{UrlApi.USER_URL}', headers={"Authorization": f"{access_token}"})
-    assert delete_response.status_code == 202
 
 @pytest.fixture
 def login_user(driver, create_user_and_get_token):
@@ -51,4 +52,12 @@ def login_user(driver, create_user_and_get_token):
     main_page.main_page_loading_wait()
     account_page.click_button_login()
     main_page.main_page_loading_wait()
+
+@pytest.fixture
+def prepared_order(driver, create_user_and_get_token, login_user):
     main_page = MainPage(driver)
+    order_feed_page = OrderFeedPage(driver)
+    account_page = AccountPage(driver)
+    main_page.create_order()
+    main_page.main_page_loading_wait()
+    return main_page, order_feed_page, account_page

@@ -15,10 +15,7 @@ class OrderFeedPage(BasePage):
 
     @allure.step('Проверка: ждем и забираем "Номер заказа"')
     def wait_to_get_actual_order_number(self):
-        self.wait_for_element(OrderFeedPageLocators.ORDER_NUMBER_IN_MODAL_WINDOW)
-        while self.get_text_of_element(OrderFeedPageLocators.ORDER_NUMBER_IN_MODAL_WINDOW) == '9999':
-            pass
-        return self.get_text_of_element(OrderFeedPageLocators.ORDER_NUMBER_IN_MODAL_WINDOW)
+        return self.wait_for_text_to_change(OrderFeedPageLocators.ORDER_NUMBER_IN_MODAL_WINDOW, '9999')
 
     @allure.step('Закрыть окно с информацией о заказе')
     def click_on_close_button_information_of_order(self):
@@ -32,10 +29,6 @@ class OrderFeedPage(BasePage):
     def check_order_number_in_order_list(self, expected_value):
         return self.check_text_on_page()
 
-
-    TOTAL_ORDERS_COUNTER_METHOD = "get_total_orders_count"
-    TODAY_ORDERS_COUNTER_METHOD = "get_today_orders_count"
-
     @allure.step("Получить значение счетчика 'Выполнено всего'")
     def get_total_orders_count(self):
         element = self.wait_for_element(OrderFeedPageLocators.TOTAL_ORDERS_COUNTER)
@@ -45,13 +38,6 @@ class OrderFeedPage(BasePage):
     def get_today_orders_count(self):
         element = self.wait_for_element(OrderFeedPageLocators.TODAY_ORDERS_COUNTER)
         return int(element.text)
-
-    @allure.step("определяем имя метод счетчика по его типу")
-    def get_counter_method_name(self, counter_type):
-        if counter_type == "total":
-            return OrderFeedPage.TOTAL_ORDERS_COUNTER_METHOD
-        elif counter_type == "today":
-            return OrderFeedPage.TODAY_ORDERS_COUNTER_METHOD
 
     @allure.step("Получить список номеров заказов в разделе 'В работе'")
     def get_order_numbers_in_progress(self):

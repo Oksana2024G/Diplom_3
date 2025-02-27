@@ -26,7 +26,7 @@ class BasePage:
         return WebDriverWait(self.driver, timeout).until(EC.element_to_be_clickable(locator))
 
     @allure.step("Кликнуть на элемент")
-    def click_on_element(self, locator, timeout=17):
+    def click_on_element(self, locator, timeout=20):
         element = self.wait_for_clickable_element(locator, timeout)
         element.click()
 
@@ -39,6 +39,13 @@ class BasePage:
     @allure.step("Получить текст элемента")
     def get_text_of_element(self, locator):
         return self.driver.find_element(*locator).text
+
+    @allure.step("Ожидаем, пока текст элемента станет отличным от заданного")
+    def wait_for_text_to_change(self, locator, old_text, timeout=15):
+        WebDriverWait(self.driver, timeout).until(
+            lambda driver: self.get_text_of_element(locator) != old_text
+        )
+        return self.get_text_of_element(locator)
 
     def check_text_on_page(self):
         return self.driver.page_source

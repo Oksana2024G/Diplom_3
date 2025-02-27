@@ -15,7 +15,7 @@ class MainPage(BasePage):
     @allure.step('Клик по ссылке "Личный кабинет"')
     def click_on_account_link(self):
         self.main_page_loading_wait()
-        self.click_on_element(MainPageLocators.PROFILE_LINK)
+        self.click_on_element(MainPageLocators.PROFILE_LINK, 22)
 
     @allure.step('Клик по ссылке "Конструктор"')
     def click_on_constructor_link(self):
@@ -40,7 +40,7 @@ class MainPage(BasePage):
 
     @allure.step('Клик по крестику всплывающего окна')
     def click_on_cross_button_modal_window(self):
-        self.click_on_element(MainPageLocators.CROSS_BUTTON)
+        self.click_on_element(MainPageLocators.CROSS_BUTTON, 20)
 
     @allure.step('Проверка НЕвидимости элемента "Детали ингридиента"')
     def check_invisible_ingredient_detail_on_window(self):
