@@ -19,12 +19,12 @@ class AccountPage(BasePage):
 
     @allure.step("Кликнуть по кнопке История заказов")
     def click_button_oder_histore(self):
-        self.click_on_element(AccountPageLocators.ORDER_HISTORE_BUTTON, 22)
+        self.click_on_element(AccountPageLocators.ORDER_HISTORE_BUTTON, 24)
 
     @allure.step("Кликнуть по кнопке Выход")
     def click_logout_button(self):
         self.driver.delete_all_cookies()
-        self.click_on_element(AccountPageLocators.LOGOUT_BUTTON, 15)
+        self.click_on_element(AccountPageLocators.LOGOUT_BUTTON, 17)
 
     @allure.step("Дождаться кликабельности кнопки Войти")
     def wait_login_button_clickable(self):

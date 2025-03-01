@@ -32,25 +32,24 @@ class TestOrderFeed:
         assert order_feed_page.check_order_number_in_order_list(get_number_of_new_order)
 
     @allure.title('При создании нового заказа счётчики "Выполнено за всё время" и "Выполнено за сегодня" увеличиваются')
-    @pytest.mark.parametrize("counter_type", ["total", "today"])
-    def test_order_increases_total_and_daily_counts(self, driver, create_user_and_get_token, login_user, counter_type):
+    @pytest.mark.parametrize("counter_type, getter_method",
+    [
+        ("total", "get_total_orders_count"),
+        ("today", "get_today_orders_count"),
+    ])
+    def test_order_increases_total_and_daily_counts(self, driver, create_user_and_get_token, login_user, counter_type, getter_method):
         main_page = MainPage(driver)
         order_feed_page = OrderFeedPage(driver)
         main_page.click_on_list_order_link()
-        if counter_type == "total":
-            count_before = order_feed_page.get_total_orders_count()
-        elif counter_type == "today":
-            count_before = order_feed_page.get_today_orders_count()
+        count_before = getattr(order_feed_page, getter_method)()
         main_page.click_on_constructor_link()
         main_page.create_order()
         main_page.main_page_loading_wait()
         order_feed_page.click_on_close_button_information_of_order()
         main_page.main_page_loading_wait()
         main_page.click_on_list_order_link()
-        if counter_type == "total":
-            count_after = order_feed_page.get_total_orders_count()
-        elif counter_type == "today":
-            count_after = order_feed_page.get_today_orders_count()
+        main_page.main_page_loading_wait()
+        count_after = getattr(order_feed_page, getter_method)()
         assert count_after > count_before
 
     @allure.title('После создании нового заказа его номер появляется в резделе "В работе"')

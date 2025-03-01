@@ -1,5 +1,5 @@
 class Url:
-    TEST_URL = 'https://stellarburgers.nomoreparties.site/'  # Базовый URL (без завершающего слеша)
+    TEST_URL = 'https://stellarburgers.nomoreparties.site/'
 
     FORGOT_PASSWORD_URL = TEST_URL + 'forgot-password'
     RESET_PASSWORD_URL = TEST_URL + 'reset-password'
